@@ -5,6 +5,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { buildNavTree, ensureUniqueSlug, slugifyTitle } from "./notion-sync-utils";
 import { buildFlatTree } from "./notion-sync-core";
+import { rewriteNotionLinks } from "./notion-link-utils";
 
 const rootId = process.env.NOTION_ROOT_PAGE_ID;
 const token = process.env.NOTION_TOKEN;
@@ -42,12 +43,25 @@ async function writeDocs(pages: { id: string; title: string; parentId: string | 
   await mkdir(docsDir, { recursive: true });
 
   const used = new Set<string>();
+  const idToSlug = new Map<string, string>();
+  const normalizeId = (id: string) => id.replace(/-/g, "").toLowerCase();
+  const slugsById = new Map<string, string>();
+
+  for (const page of pages) {
+    const slug = ensureUniqueSlug(slugifyTitle(page.title), page.id, used);
+    slugsById.set(page.id, slug);
+    idToSlug.set(normalizeId(page.id), slug);
+  }
+
   const writtenSlugs = new Set<string>();
   for (const page of pages) {
     const mdBlocks = await n2m.pageToMarkdown(page.id);
-    const md = n2m.toMarkdownString(mdBlocks).parent;
-
-    const slug = ensureUniqueSlug(slugifyTitle(page.title), page.id, used);
+    const rawMd = n2m.toMarkdownString(mdBlocks).parent;
+    const slug = slugsById.get(page.id);
+    if (!slug) {
+      continue;
+    }
+    const md = rewriteNotionLinks(rawMd || "", idToSlug);
     const frontmatter = `---\ntitle: "${page.title}"\nnotionId: "${page.id}"\n---\n`;
 
     await writeFile(
