@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { Client } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
 import { mkdir, writeFile } from "node:fs/promises";
