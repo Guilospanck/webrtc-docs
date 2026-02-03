@@ -24,19 +24,35 @@ const notion = new Client({ auth: token });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
 async function listChildPages(pageId: string) {
-  const blocks: any[] = [];
-  let cursor: string | undefined;
+  const collected: any[] = [];
+  const queue: string[] = [pageId];
 
-  do {
-    const res = await notion.blocks.children.list({
-      block_id: pageId,
-      start_cursor: cursor,
-    });
-    blocks.push(...res.results);
-    cursor = res.has_more ? res.next_cursor ?? undefined : undefined;
-  } while (cursor);
+  while (queue.length) {
+    const current = queue.shift()!;
+    let cursor: string | undefined;
 
-  return blocks;
+    do {
+      const res = await notion.blocks.children.list({
+        block_id: current,
+        start_cursor: cursor,
+      });
+
+      for (const block of res.results) {
+        if (block.type === "child_page" || block.type === "link_to_page") {
+          collected.push(block);
+          continue;
+        }
+
+        if (block.has_children) {
+          queue.push(block.id);
+        }
+      }
+
+      cursor = res.has_more ? res.next_cursor ?? undefined : undefined;
+    } while (cursor);
+  }
+
+  return collected;
 }
 
 async function writeDocs(pages: { id: string; title: string; parentId: string | null }[]) {
@@ -78,7 +94,7 @@ async function writeDocs(pages: { id: string; title: string; parentId: string | 
     writtenSlugs.add(slug);
   }
 
-  const nav = buildNavTree(pages).slice(1);
+  const nav = buildNavTree(pages);
   await writeFile(join(docsDir, "_nav.json"), JSON.stringify(nav, null, 2));
 
   const missing: string[] = [];
