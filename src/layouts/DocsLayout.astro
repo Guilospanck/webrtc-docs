@@ -1,0 +1,39 @@
+---
+const { nav, title } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">WebRTC</div>
+        <nav>
+          <ul>
+            {nav.map((item) => (
+              <li>
+                <a href={`/docs/${item.slug}`}>{item.title}</a>
+                {item.children.length > 0 && (
+                  <ul>
+                    {item.children.map((child) => (
+                      <li>
+                        <a href={`/docs/${child.slug}`}>{child.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+      <main class="content">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

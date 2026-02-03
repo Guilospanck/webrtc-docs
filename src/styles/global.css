@@ -1,0 +1,103 @@
+:root {
+  --bg: #f5f2ea;
+  --surface: #fcf9f4;
+  --ink: #1f1b16;
+  --muted: #7d6f62;
+  --accent: #2f6f65;
+  --accent-2: #c9a46b;
+  --border: #e0d6c9;
+  --code-bg: #2b2a28;
+  --code-ink: #f6f1e8;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino,
+    "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #fff3d6 0%, #f5f2ea 55%, #e9e2d6 100%);
+  color: var(--ink);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.brand {
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  color: var(--accent);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin: 0.4rem 0;
+}
+
+.sidebar a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.sidebar a:hover {
+  color: var(--accent);
+}
+
+.content {
+  padding: 3rem 4vw;
+  max-width: 860px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown {
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.markdown pre {
+  background: var(--code-bg);
+  color: var(--code-ink);
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
