@@ -62,4 +62,27 @@ describe("notion-sync-core", () => {
       { id: "c", title: "C", parentId: "a" },
     ]);
   });
+
+  it("includes link_to_page blocks as children", async () => {
+    const fetchPage = async (id: string) => ({
+      id,
+      properties: {
+        title: {
+          title: [{ plain_text: id }],
+        },
+      },
+    });
+
+    const fetchChildPages = async () => [
+      { id: "linked", type: "link_to_page", link_to_page: { page_id: "linked" } },
+    ];
+
+    const pages = await buildFlatTree({
+      rootId: "root",
+      fetchPage,
+      fetchChildPages,
+    });
+
+    expect(pages.find((page) => page.id === "linked")).toBeTruthy();
+  });
 });

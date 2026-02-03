@@ -15,6 +15,9 @@ type NotionPage = {
 type NotionBlock = {
   id: string;
   type: string;
+  link_to_page?: {
+    page_id?: string;
+  };
 };
 
 export function extractTitleFromPage(page: NotionPage): string {
@@ -23,7 +26,9 @@ export function extractTitleFromPage(page: NotionPage): string {
 }
 
 export function filterChildPages(blocks: NotionBlock[]): NotionBlock[] {
-  return blocks.filter((block) => block.type === "child_page");
+  return blocks.filter(
+    (block) => block.type === "child_page" || block.type === "link_to_page"
+  );
 }
 
 export async function buildFlatTree(params: {
@@ -34,6 +39,7 @@ export async function buildFlatTree(params: {
   const queue: { id: string; parentId: string | null }[] = [
     { id: params.rootId, parentId: null },
   ];
+  const seen = new Set<string>([params.rootId]);
   const pages: FlatPage[] = [];
 
   while (queue.length) {
@@ -47,7 +53,16 @@ export async function buildFlatTree(params: {
 
     const children = filterChildPages(await params.fetchChildPages(current.id));
     for (const child of children) {
-      queue.push({ id: child.id, parentId: current.id });
+      const childId =
+        child.type === "link_to_page" ? child.link_to_page?.page_id : child.id;
+      if (!childId) {
+        continue;
+      }
+      if (seen.has(childId)) {
+        continue;
+      }
+      seen.add(childId);
+      queue.push({ id: childId, parentId: current.id });
     }
   }
 
