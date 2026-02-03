@@ -1,5 +1,7 @@
 ---
 import nav from "../../content/docs/_nav.json";
 const first = nav[0];
+const base = import.meta.env.BASE_URL;
+const target = first ? `${base}docs/${first.slug}/` : base;
 ---
-<meta http-equiv="refresh" content={`0; url=/docs/${first.slug}`} />
+<meta http-equiv="refresh" content={`0; url=${target}`} />

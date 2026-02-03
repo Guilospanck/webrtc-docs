@@ -1,12 +1,15 @@
 ---
+import "../styles/global.css";
+
 const { nav, title } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const docUrl = (slug) => `${base}docs/${slug}/`;
 ---
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    <link rel="stylesheet" href="/src/styles/global.css" />
   </head>
   <body>
     <div class="layout">
@@ -16,12 +19,12 @@ const { nav, title } = Astro.props;
           <ul>
             {nav.map((item) => (
               <li>
-                <a href={`/docs/${item.slug}`}>{item.title}</a>
+                <a href={docUrl(item.slug)}>{item.title}</a>
                 {item.children.length > 0 && (
                   <ul>
                     {item.children.map((child) => (
                       <li>
-                        <a href={`/docs/${child.slug}`}>{child.title}</a>
+                        <a href={docUrl(child.slug)}>{child.title}</a>
                       </li>
                     ))}
                   </ul>
