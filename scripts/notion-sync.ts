@@ -39,6 +39,7 @@ async function writeDocs(pages: { id: string; title: string; parentId: string | 
   await mkdir(docsDir, { recursive: true });
 
   const used = new Set<string>();
+  const writtenSlugs = new Set<string>();
   for (const page of pages) {
     const mdBlocks = await n2m.pageToMarkdown(page.id);
     const md = n2m.toMarkdownString(mdBlocks).parent;
@@ -50,10 +51,25 @@ async function writeDocs(pages: { id: string; title: string; parentId: string | 
       join(docsDir, `${slug}.md`),
       `${frontmatter}\n${md || "No content yet."}`
     );
+    writtenSlugs.add(slug);
   }
 
   const nav = buildNavTree(pages).slice(1);
   await writeFile(join(docsDir, "_nav.json"), JSON.stringify(nav, null, 2));
+
+  const missing: string[] = [];
+  const stack = [...nav];
+  while (stack.length) {
+    const current = stack.pop()!;
+    if (!writtenSlugs.has(current.slug)) {
+      missing.push(current.slug);
+    }
+    stack.push(...current.children);
+  }
+
+  if (missing.length > 0) {
+    throw new Error(`Nav references missing docs: ${missing.join(", ")}`);
+  }
 }
 
 async function main() {
