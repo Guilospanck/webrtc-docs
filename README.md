@@ -1,14 +1,12 @@
 # Notion WebRTC Docs
 
-[![Deploy](https://github.com/Guilospanck/webrtc-docs/actions/workflows/deploy.yml/badge.svg)](https://github.com/Guilospanck/webrtc-docs/actions/workflows/deploy.yml)
-
 Static docs site powered by Astro, generated from the Notion page **“📡 WebRTC”** and its subpages.
 
 ## Overview
 - Fetches Notion content at build time
 - Converts blocks to Markdown
 - Renders with Astro docs layout + sidebar
-- Deploys to GitHub Pages via Actions
+- Deploys to GitHub Pages via the local deploy command
 
 ## Requirements
 - Node.js 20+
@@ -37,6 +35,7 @@ BASE_PATH=/
 - `npm run preview` – preview build locally
 - `npm run test` – run unit tests
 - `npm run lint` – typecheck (`tsc --noEmit`)
+- `npm run deploy` – sync, build, and publish to `gh-pages`
 
 ## Notion Sync
 The sync script pulls pages from Notion and writes:
@@ -46,11 +45,12 @@ The sync script pulls pages from Notion and writes:
 Generated content is ignored by git; run `npm run sync` locally or in CI.
 
 ## Deploy
-GitHub Actions deploys on every push to `main` using the workflow in `.github/workflows/deploy.yml`.
+To deploy to GitHub Pages, run the local deploy script. Make sure your `.env` is set up first.
 
-Required secret:
-- `NOTION_TOKEN`
+```bash
+npm run deploy
+```
 
 ## Notes
 - The root Notion page ID is currently set to the WebRTC page: `2f980e39-00fd-8084-8af0-c2c50d001733`.
-- If you change the root page, update `.env` and the GitHub Actions workflow.
+- If you change the root page, update `.env`.
