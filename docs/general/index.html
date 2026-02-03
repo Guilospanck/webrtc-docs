@@ -1,2 +1,150 @@
 <!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>General</title><style>:root{--bg: #f5f2ea;--surface: #fcf9f4;--ink: #1f1b16;--muted: #7d6f62;--accent: #2f6f65;--accent-2: #c9a46b;--border: #e0d6c9;--code-bg: #2b2a28;--code-ink: #f6f1e8;font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Times New Roman,serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#fff3d6,#f5f2ea 55%,#e9e2d6);color:var(--ink)}.layout{display:grid;grid-template-columns:minmax(240px,280px) 1fr;min-height:100vh}.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:2rem 1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto}.brand{font-size:1.4rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2rem;color:var(--accent)}.sidebar ul{list-style:none;padding:0;margin:0}.sidebar li{margin:.4rem 0}.sidebar a{color:var(--ink);text-decoration:none;font-weight:600}.sidebar a:hover{color:var(--accent)}.content{padding:3rem 4vw;max-width:860px}h1{font-size:2.5rem;margin-bottom:1rem}.markdown{line-height:1.7;font-size:1.05rem}.markdown pre{background:var(--code-bg);color:var(--code-ink);padding:1rem;overflow-x:auto;border-radius:8px}@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}}
-</style></head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">WebRTC</div> <nav> <ul> <li> <a href="/webrtc-docs/docs/webrtc-dev/">WebRTC - Dev</a>  </li><li> <a href="/webrtc-docs/docs/metrics/">Metrics</a>  </li><li> <a href="/webrtc-docs/docs/debugging/">Debugging</a>  </li><li> <a href="/webrtc-docs/docs/planning/">Planning</a>  </li> </ul> </nav> </aside> <main class="content">  <article> <h1>General</h1> <div class="markdown">[object Object]</div> </article>  </main> </div> </body></html>
+</style></head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">WebRTC</div> <nav> <ul> <li> <a href="/webrtc-docs/docs/webrtc-dev/">WebRTC - Dev</a>  </li><li> <a href="/webrtc-docs/docs/metrics/">Metrics</a>  </li><li> <a href="/webrtc-docs/docs/debugging/">Debugging</a>  </li><li> <a href="/webrtc-docs/docs/planning/">Planning</a>  </li> </ul> </nav> </aside> <main class="content">  <article> <h1>General</h1> <div class="markdown"> <blockquote>
+<p>💡 Encryption is NOT optional in WebRTC.</p>
+</blockquote>
+<ul>
+<li>It uses UDP, but adds two layers of it:
+<ul>
+<li>SRTP (Secure Real-time Transport Protocol): used for audio and video. It adds encryption, authentication, timing-aware delivery, no retransmission by default;</li>
+<li>SCTP (Stream Control Transmission Protocol): used for DataChannels. Think of: chat messages, game state, cursor positions, collaborative editing.</li>
+<li>DTLS (Datagram Transport Layer Security) to provide encryption.</li>
+</ul>
+</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plain"><code><span class="line"><span>WebRTC</span></span>
+<span class="line"><span>           |</span></span>
+<span class="line"><span>    -----------------</span></span>
+<span class="line"><span>    |               |</span></span>
+<span class="line"><span>  Media           Data</span></span>
+<span class="line"><span> (audio/video)   (DataChannel)</span></span>
+<span class="line"><span>    |               |</span></span>
+<span class="line"><span>  SRTP            SCTP</span></span>
+<span class="line"><span>    \               /</span></span>
+<span class="line"><span>         DTLS</span></span>
+<span class="line"><span>           |</span></span>
+<span class="line"><span>          UDP</span></span></code></pre>
+<blockquote>
+<p>💡 The main reason WebRTC doesn’t use QUIC is because QUIC retransmits, media must not.</p>
+<p>WebRTC says: “if it’s late, drop it”<br>
+QUIC says: “If it’s lost, resend it”</p>
+</blockquote>
+<ul>
+<li>It’s encrypted (DTLS)</li>
+<li>ICE (Internet Connectivity Establishment): is the boss, selects some type of connection
+<ul>
+<li>STUN: uses public IP (fast, cheap, but doesn’t work with strict firewalls)</li>
+<li>TURN: is the fallback. If everything fails, it uses a TURN server. (slower, more costly, not p2p, works almost everywhere).</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>💡 The media (audio and video) behaviour: audio will always win, it has the highest priority.</p>
+</blockquote>
+<h2 id="comparison-to-websockets">Comparison to Websockets</h2>
+<p>WebRTC</p>
+<ul>
+<li>great for 1:1; harder for M:M</li>
+<li>UDP</li>
+<li>Low latency</li>
+<li>Tolerates packet loss</li>
+<li>Great for real-time media</li>
+<li>Peer to peer</li>
+</ul>
+<p>Websockets</p>
+<ul>
+<li>Reliable message delivery</li>
+<li>TCP</li>
+<li>Client ↔ Server</li>
+</ul>
+<h3 id="when-to-use">When to use</h3>
+<p>WebRTC</p>
+<ul>
+<li>video/audio calls</li>
+<li>screen sharing</li>
+<li>multiplayer games</li>
+<li>collaborative cursors</li>
+<li>live interaction</li>
+</ul>
+<p>Websockets</p>
+<ul>
+<li>chat messages</li>
+<li>notifications</li>
+<li>dashboards</li>
+<li>turn-based games</li>
+<li>syncing state</li>
+</ul>
+<h2 id="data-channels">Data Channels</h2>
+<p>DataChannels are arbitrary application data that’s not audio/video. Examples: <code>chat messages</code>, <code>cursor positions</code>, <code>game state</code>, <code>whiteboard strokes</code>, <code>file transfer</code>, <code>control messages (mute, pause, sync)</code>. They often complement media (audio/video).</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#E1E4E8">DataChannel</span></span>
+<span class="line"><span style="color:#E1E4E8">   ↓</span></span>
+<span class="line"><span style="color:#79B8FF">SCTP</span></span>
+<span class="line"><span style="color:#E1E4E8">   ↓</span></span>
+<span class="line"><span style="color:#79B8FF">DTLS</span></span>
+<span class="line"><span style="color:#E1E4E8">   ↓</span></span>
+<span class="line"><span style="color:#79B8FF">UDP</span></span></code></pre>
+<p>Some of its superpowers:</p>
+<h3 id="configurable-reliability">Configurable reliability</h3>
+<p>Allows you to choose: reliable, unreliable, partially reliable (time-based or retry-limited). Example:</p>
+<ul>
+<li>chat → reliable</li>
+<li>cursor position → unreliable</li>
+<li>game state → retry for 50ms, then drop</li>
+</ul>
+<h3 id="ordered-or-unordered-delivery">Ordered or unordered delivery</h3>
+<ul>
+<li>ordered → messages arrive in sequence</li>
+<li>unordered → faster, no waiting</li>
+</ul>
+<h3 id="no-hol-blocking">No HOL blocking</h3>
+<p>One delayed message doesn’t block others.</p>
+<h3 id="message-based-not-byte-streams">Message-based (not byte streams)</h3>
+<p>You send:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#E1E4E8">channel.</span><span style="color:#B392F0">send</span><span style="color:#E1E4E8">({ x: </span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">, y: </span><span style="color:#79B8FF">32</span><span style="color:#E1E4E8"> })</span></span></code></pre>
+<p>You receive exactly one message. No framing. No delimiters.</p>
+<h3 id="datachannels-vs-websockets">DataChannels vs WebSockets</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Feature</th><th>DataChannel</th><th>WebSocket</th></tr></thead><tbody><tr><td>Topology</td><td>Peer-to-peer</td><td>Client–server</td></tr><tr><td>Transport</td><td>UDP (SCTP)</td><td>TCP</td></tr><tr><td>Reliability</td><td>Configurable</td><td>Always reliable</td></tr><tr><td>Ordering</td><td>Optional</td><td>Always ordered</td></tr><tr><td>Latency</td><td>Very low</td><td>Higher under loss</td></tr><tr><td>NAT traversal</td><td>Built-in</td><td>Manual</td></tr></tbody></table>
+<h2 id="glossary">Glossary</h2>
+<h3 id="jitter">Jitter</h3>
+<p>It’s the variation in packet arrival time. Let’s say audio packets are supposed to arrive every 20ms. Ideal world: <code>20ms, 20ms, 20ms, 20ms</code>. Real network: <code>18ms, 33ms, 22ms, 20ms</code>. All packets arrive, but the timing is inconsistent. The inconsistency is Jitter.</p>
+<p>It’s very bad for audio/video because it causes lip-sync issues, pops, crackles, robotic voice, stutter,uneven motion.</p>
+<p>A jitter buffer is good to smooth the packet timing. It basically saves those packets into a buffer and then release them at a steady pace. The tradeoff is that bigger buffer means more latency (although smoother playback); lower buffer means less latency, but more glitches.</p> </div> </article>  </main> </div> </body></html>

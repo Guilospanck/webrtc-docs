@@ -1,2 +1,143 @@
 <!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Metrics</title><style>:root{--bg: #f5f2ea;--surface: #fcf9f4;--ink: #1f1b16;--muted: #7d6f62;--accent: #2f6f65;--accent-2: #c9a46b;--border: #e0d6c9;--code-bg: #2b2a28;--code-ink: #f6f1e8;font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Times New Roman,serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#fff3d6,#f5f2ea 55%,#e9e2d6);color:var(--ink)}.layout{display:grid;grid-template-columns:minmax(240px,280px) 1fr;min-height:100vh}.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:2rem 1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto}.brand{font-size:1.4rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2rem;color:var(--accent)}.sidebar ul{list-style:none;padding:0;margin:0}.sidebar li{margin:.4rem 0}.sidebar a{color:var(--ink);text-decoration:none;font-weight:600}.sidebar a:hover{color:var(--accent)}.content{padding:3rem 4vw;max-width:860px}h1{font-size:2.5rem;margin-bottom:1rem}.markdown{line-height:1.7;font-size:1.05rem}.markdown pre{background:var(--code-bg);color:var(--code-ink);padding:1rem;overflow-x:auto;border-radius:8px}@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}}
-</style></head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">WebRTC</div> <nav> <ul> <li> <a href="/webrtc-docs/docs/webrtc-dev/">WebRTC - Dev</a>  </li><li> <a href="/webrtc-docs/docs/metrics/">Metrics</a>  </li><li> <a href="/webrtc-docs/docs/debugging/">Debugging</a>  </li><li> <a href="/webrtc-docs/docs/planning/">Planning</a>  </li> </ul> </nav> </aside> <main class="content">  <article> <h1>Metrics</h1> <div class="markdown">[object Object]</div> </article>  </main> </div> </body></html>
+</style></head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">WebRTC</div> <nav> <ul> <li> <a href="/webrtc-docs/docs/webrtc-dev/">WebRTC - Dev</a>  </li><li> <a href="/webrtc-docs/docs/metrics/">Metrics</a>  </li><li> <a href="/webrtc-docs/docs/debugging/">Debugging</a>  </li><li> <a href="/webrtc-docs/docs/planning/">Planning</a>  </li> </ul> </nav> </aside> <main class="content">  <article> <h1>Metrics</h1> <div class="markdown"> <p><a href="https://prod-files-secure.s3.us-west-2.amazonaws.com/16e10f12-7f77-49e5-882d-4274340eb6cd/fc8b9911-561b-4801-bf05-bb6f39980de0/BlogGeekMe-Top-7-WebRTC-Video-Quality-Metrics-and-KPIs.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&#x26;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&#x26;X-Amz-Credential=ASIAZI2LB466455UXILZ%2F20260203%2Fus-west-2%2Fs3%2Faws4_request&#x26;X-Amz-Date=20260203T174737Z&#x26;X-Amz-Expires=3600&#x26;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLXdlc3QtMiJHMEUCICP13kbQ4NbpmR3ia3RO9Z7%2BYrUAkDM9Qzz6%2FhgE7YQiAiEA6ZxoDvy%2Fu2uRKn%2B37LuV02e43t0ODVFgQ2iKlhHHbLIq%2FwMIAxAAGgw2Mzc0MjMxODM4MDUiDMYNXrNeortB2Y4vwircAwTFOZDORp1fiOdNxPXttpVUQhKuF81jXbar%2FRG%2F1FGiXReB0qecQ3Nr1HwNTfMY55nUs%2FgDjU%2Fn4BCz6b3OygrDOyXHtfsblZBsrkcJNd02JlGxulmpnjJMDDuyke0Y1QnfoniLzIj5SKa53qhIkFcX9gUfbdoqBZ7JCuavJ2my%2BH3RXUax36DV3V3iwinLV2ag8ii4jKqTtDdQXLerTSVbJmw5QepDtdR9vDWZAO00uRCWTJofP8d8n8G%2B1IEkyMq0nPwrInGs0as2BCq2B%2FDxlGeso4OS%2FPQAYehssKpjUtQzG7Hmu7aPmo7u2HKHsVc4SV0fCopORR9%2FDMmw5eaWa%2B58gnp2MwvYgDHaP%2B6%2BlrplBnnCvLvvNwMHiIYIs2Xg2%2FQPQ5%2B4MfoLCTNr6BqCWT1f334wlITwClKMfIOOVjGPc2u9rPPl2%2B3aG3feDWy0tHklFSAsYmR89Sx6x2s1MSWcyM2QMx7xobuYBS1WPRAhO3nJFoXkjWk%2BlFlyODryfuv0DMZxFRWgW62%2BOf8Ir2dhAZuKihGpjYYxONWeuypFWeQa2R7T5aC1HIamf5I6dC4YuGfSYBuZPovbpgXWIR0hRMfU%2Bm4y5inBkey4b4ULkhcsWc9N9SMvMJPliMwGOqUBFXQ1o7KySZulHGDDkKWeBoJ56D%2FxWsSVE7HSGoXbkvOkkgf%2FPBcY8SoLGyueugBcGplg1xTdONbRRnGd3CD%2F4YJPr0RZl7qkD2%2FAf2u5w9ZxhWj5QRhPrs8Hrqla2r%2FaeGg1T7vtpmNr0CkO1kMo15fEHfxXXsKCLmvPOBq1%2BH61fHz46W2HmXmiwBGptOipPWvNwvlWBY%2FFHsKmUGfgw3cudn9y&#x26;X-Amz-Signature=0a7d0df0544b95e7845d691c6fc5baf7a404ae24a70c22d92c5c03a812adb020&#x26;X-Amz-SignedHeaders=host&#x26;x-amz-checksum-mode=ENABLED&#x26;x-id=GetObject">BlogGeekMe-Top-7-WebRTC-Video-Quality-Metrics-and-KPIs.pdf</a></p>
+<p>The 7 most import KPIs (Key Performance Indicators) are:</p>
+<ul>
+<li>Bitrate</li>
+<li>Jitter</li>
+<li>Packet loss</li>
+<li>Round trip time                          ☝🏻 Video/audio                    👇🏻 Video specific</li>
+</ul>
+<hr>
+<ul>
+<li>Resolution</li>
+<li>Frame rate</li>
+<li>Freeze count</li>
+</ul>
+<h2 id="bitrate">Bitrate</h2>
+<blockquote>
+<p>💡 There’s no GOOD or BAD number for Bitrate. It’s application dependent.</p>
+</blockquote>
+<p>Talks about the number of bits per second (bps) we are sending/receiving.</p>
+<p>⬆️ Higher Bitrate = ⬆️ Higher Quality</p>
+<p>Think of it as the amount of information per second we are sending. Of course video requires higher bitrate than audio because it needs more information.</p>
+<h3 id="trade-offs">Trade-offs</h3>
+<ul>
+<li>⬆️ Higher Bitrate = ⬆️ more network resources, which might not always be available or possible. Bitrate MUST always be lower than the Bandwidth of your network.</li>
+</ul>
+<blockquote>
+<p>💡 Bandwidth is the CAPACITY of transferring data that your network has.<br>
+Bitrate is HOW MUCH it is actually transferring.</p>
+</blockquote>
+<ul>
+<li>Higher bitrates also mean more CPU and memory usage for the encoding/decoding (by the codec) processes.</li>
+</ul>
+<h3 id="suggestions">Suggestions</h3>
+<ul>
+<li>Figure out what is a good bitrate for the application</li>
+<li>Measure the average used in the application and monitor it over time</li>
+<li>Check the outliers: both on lower and higher ends</li>
+</ul>
+<h2 id="jitter">Jitter</h2>
+<blockquote>
+<p>💡 Lower is better. 30ms or less is acceptable.</p>
+</blockquote>
+<p>It’s the difference between the rates at which the packets were sent and when they were received.</p>
+<p>So if you sent audio packets at 20ms rates, but on the receiving end they don’t have this same 20ms rates between them, then you have a Jitter.</p>
+<p>Some ways to optimize it is by either adding more Jitter buffer (more latency, smoother audio/video). Or just drop the ones that arrive too late (this can prevent the glitches of high pitches or slow motion-like movement/audio, but means lower quality for the final user).</p>
+<h3 id="suggestions-1">Suggestions</h3>
+<ul>
+<li>Check if jitter goes higher based on certain geographies, service providers, network types or devices</li>
+<li>Focus on the 99th percentile of jitter values when optimising performance</li>
+</ul>
+<h2 id="packet-loss">Packet Loss</h2>
+<blockquote>
+<p>💡 Lower is better. The goal is to reach zero packets lost.</p>
+</blockquote>
+<p>Packet loss occurs when one or more packets transmitted fail to arrive at their destination.</p>
+<p>⬆️ Higher Packet Loss = ⬇️ Lower Media Quality</p>
+<p>There are two types of packet losses that may occur:</p>
+<ul>
+<li>Congestion: when you send more packets than the network can handle. The solution is a better bandwidth and more timely reduction in bitrate when the need rise. (Lowering bitrate means less bandwidth consumed which means lesser possibility of packet loss by congestion).</li>
+<li>Corruption: happens from time to time and it’s hard to predict. Better network resiliency is the way to go.</li>
+</ul>
+<h3 id="suggestions-2">Suggestions</h3>
+<ul>
+<li>Track packet loss in the application</li>
+<li>Figure out if the losses are happening sporadically or not</li>
+<li>For the outliers, search for network issues related to the user’s environment</li>
+</ul>
+<h2 id="round-trip-time-rtt">Round Trip Time (RTT)</h2>
+<blockquote>
+<p>💡 Lower is better. 300ms or less is acceptable.</p>
+</blockquote>
+<p>It’s the time it takes from a moment a packet is sent until we get a response. (That’s basically a ping).</p>
+<p>Usually this is a network issue, so be mindful of where you put your servers.</p>
+<h3 id="suggestions-3">Suggestions</h3>
+<ul>
+<li>Collect and monitor RTT values</li>
+<li>Focus on each geography separately, deciding where to add more servers</li>
+<li>Consider using a 3rd party TURN service such as Twilio Network Traversal Service or <a href="https://developers.cloudflare.com/realtime/turn/">Cloudflare Calls TURN Service</a>.</li>
+</ul>
+<h2 id="resolution">Resolution</h2>
+<blockquote>
+<p>💡 Higher is (mostly) better. See trade-offs. You must understand your application needs.</p>
+</blockquote>
+<p>The number of pixels in a video frame, measured in width and height.</p>
+<h3 id="trade-offs-1">Trade-offs</h3>
+<ul>
+<li>⬆️ Higher resolution necessitates ⬆️ Higher bitrate, which leads to more network resources needed (internet speed, bandwidth, etc)</li>
+<li>If the display region of the receiver is of low resolution or physically small, higher resolution is not gonna help and it won’t be worth it (you will basically just be spending resources away)</li>
+<li>Higher resolution means higher CPU and memory used in both ends (encoding/decoding/buffer)</li>
+<li>Frequent fluctuations in resolution in a stream often leads to lower perceived video quality (so if your initial resolution is too high and your connection can’t handle it, webRTC will then start scaling it down which will suck)</li>
+</ul>
+<h3 id="suggestions-4">Suggestions</h3>
+<ul>
+<li>Check the resolution used in the service</li>
+<li>Make sure it fits well to what the receiver capabilities are</li>
+<li>Check if calls have frequent fluctuations in resolutions in their session that cannot be explained by a change in screen layout.</li>
+</ul>
+<h2 id="frame-rate">Frame Rate</h2>
+<blockquote>
+<p>💡 Higher is better. 15-30fps is acceptable.</p>
+<p>Differences in frame rate between a sender and a receiver it’s usually due to high packet loss or high RTT).</p>
+</blockquote>
+<p>The number of frames per second (fps) that are sent and received in a video stream.</p>
+<p>The amount of work per second that a service/device must do is directly related to the <code>resolution x frame rate</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">work</span><span style="color:#9ECBFF"> per</span><span style="color:#9ECBFF"> second</span><span style="color:#9ECBFF"> ∝</span><span style="color:#9ECBFF"> resolution</span><span style="color:#9ECBFF"> ×</span><span style="color:#9ECBFF"> frame</span><span style="color:#9ECBFF"> rate</span></span></code></pre>
+<p>Therefore, the higher the resolution, the lower the frame rate can be. The higher the frame rate, the lower the resolution can be.</p>
+<blockquote>
+<p>💡 Based on the maximum processes your system can do per second (check bandwidth), you can juggle these values (frame rate vs resolution).</p>
+</blockquote>
+<blockquote>
+<p>Resolution and frame rate compete for the same per-second processing and bandwidth budget, so increasing one usually forces the other to decrease.</p>
+</blockquote>
+<h3 id="suggestions-5">Suggestions</h3>
+<ul>
+<li>Based on your network, choose your bitrate</li>
+<li>Then, depending on your application, choose what you want to do. Examples:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">Video</span><span style="color:#9ECBFF"> games:</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Competitive</span><span style="color:#9ECBFF"> shooters:</span><span style="color:#9ECBFF"> lower</span><span style="color:#9ECBFF"> resolution,</span><span style="color:#9ECBFF"> higher</span><span style="color:#9ECBFF"> FPS</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Cinematic</span><span style="color:#9ECBFF"> games:</span><span style="color:#9ECBFF"> higher</span><span style="color:#9ECBFF"> resolution,</span><span style="color:#9ECBFF"> lower</span><span style="color:#9ECBFF"> FPS</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">Video</span><span style="color:#9ECBFF"> calls:</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Talking</span><span style="color:#9ECBFF"> head:</span><span style="color:#9ECBFF"> lower</span><span style="color:#9ECBFF"> FPS,</span><span style="color:#9ECBFF"> higher</span><span style="color:#9ECBFF"> resolution</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Motion</span><span style="color:#E1E4E8"> (gestures): higher FPS, lower resolution</span></span></code></pre>
+<blockquote>
+<p>💡 Usually: ⬆️ Higher video motions means that ⬆️ FPS is desirable for a smooth video experience.</p>
+</blockquote>
+<h2 id="freeze-count">Freeze Count</h2>
+<blockquote>
+<p>💡 Lower is better.</p>
+</blockquote>
+<p>The number of times the video froze for the viewer.</p>
+<p>Some of the reasons why the video may freeze in WebRTC:</p>
+<ul>
+<li>Packet losses cause frame drops (or frames arrive too late and get dropped): ends up as a video freeze</li>
+<li>Not enough CPU or memory to decode frames in a timely fashion ending up as a video freeze</li>
+</ul>
+<h3 id="suggestions-6">Suggestions</h3>
+<ul>
+<li>Track and monitor freeze count values</li>
+<li>Figure the reasons behind them: usually optimising the code and/or infrastructure reduce freezes from occurring</li>
+</ul> </div> </article>  </main> </div> </body></html>

@@ -1,2 +1,124 @@
 <!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebRTC - Dev</title><style>:root{--bg: #f5f2ea;--surface: #fcf9f4;--ink: #1f1b16;--muted: #7d6f62;--accent: #2f6f65;--accent-2: #c9a46b;--border: #e0d6c9;--code-bg: #2b2a28;--code-ink: #f6f1e8;font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Times New Roman,serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#fff3d6,#f5f2ea 55%,#e9e2d6);color:var(--ink)}.layout{display:grid;grid-template-columns:minmax(240px,280px) 1fr;min-height:100vh}.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:2rem 1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto}.brand{font-size:1.4rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2rem;color:var(--accent)}.sidebar ul{list-style:none;padding:0;margin:0}.sidebar li{margin:.4rem 0}.sidebar a{color:var(--ink);text-decoration:none;font-weight:600}.sidebar a:hover{color:var(--accent)}.content{padding:3rem 4vw;max-width:860px}h1{font-size:2.5rem;margin-bottom:1rem}.markdown{line-height:1.7;font-size:1.05rem}.markdown pre{background:var(--code-bg);color:var(--code-ink);padding:1rem;overflow-x:auto;border-radius:8px}@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}}
-</style></head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">WebRTC</div> <nav> <ul> <li> <a href="/webrtc-docs/docs/webrtc-dev/">WebRTC - Dev</a>  </li><li> <a href="/webrtc-docs/docs/metrics/">Metrics</a>  </li><li> <a href="/webrtc-docs/docs/debugging/">Debugging</a>  </li><li> <a href="/webrtc-docs/docs/planning/">Planning</a>  </li> </ul> </nav> </aside> <main class="content">  <article> <h1>WebRTC - Dev</h1> <div class="markdown">[object Object]</div> </article>  </main> </div> </body></html>
+</style></head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">WebRTC</div> <nav> <ul> <li> <a href="/webrtc-docs/docs/webrtc-dev/">WebRTC - Dev</a>  </li><li> <a href="/webrtc-docs/docs/metrics/">Metrics</a>  </li><li> <a href="/webrtc-docs/docs/debugging/">Debugging</a>  </li><li> <a href="/webrtc-docs/docs/planning/">Planning</a>  </li> </ul> </nav> </aside> <main class="content">  <article> <h1>WebRTC - Dev</h1> <div class="markdown"> <p><a href="https://webrtc.org/getting-started/overview">https://webrtc.org/getting-started/overview</a></p>
+<blockquote>
+<p>💡 chrome://webrtc-internals<br>
+That can be used for debugging (but only in Chrome).<br>
+In Firefox-based browsers you can use: about:webrtc</p>
+<p>Check more here: <a href="https://www.webrtc-developers.com/debugging-webrtc-in-the-browsers/#debugging-webrtc-in-firefox">https://www.webrtc-developers.com/debugging-webrtc-in-the-browsers/#debugging-webrtc-in-firefox</a></p>
+</blockquote>
+<blockquote>
+<p>💡 Test ICE servers:</p>
+<ul>
+<li><a href="https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/">https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/</a></li>
+<li><a href="https://www.metered.ca/turn-server-testing?ref=metered.ca">https://www.metered.ca/turn-server-testing?ref=metered.ca</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Media capture devices includes video cameras and microphones, but also screen capturing “devices”. For cameras and microphones, we use <code>navigator.mediaDevices.getUserMedia()</code> to capture MediaStreams. For screen recording, we use <code>navigator.mediaDevices.getDisplayMedia()</code> instead.</p>
+</blockquote>
+<h2 id="media-constraints">Media constraints</h2>
+<blockquote>
+<p>💡 It is also possible to update the constraints of a track from a media device we have opened, by calling <code>applyConstraints()</code> on the track. This lets an application re-configure a media device without first having to close the existing stream.</p>
+</blockquote>
+<p>We can constrain (filter) which type of devices we’re expecting to receive from the user. These constraints can be “near”, “range” and “exact”:</p>
+<ul>
+<li>near: it’s when the browser will try to pick something as close as possible:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#6A737D">// Camera with a resolution as close to 640x480 as possible</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">    "video"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "width"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">640</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "height"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">480</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<ul>
+<li>range: it’s gonna get something in the range:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#6A737D">// Camera with a resolution in the range 640x480 to 1024x768</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">    "video"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "width"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">            "min"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">640</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "max"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1024</span></span>
+<span class="line"><span style="color:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#9ECBFF">        "height"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">            "min"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">480</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "max"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">768</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<ul>
+<li>exact: only media that exactly match what you put in there:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#6A737D">// Camera with the exact resolution of 1024x768</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">    "video"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "width"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">            "exact"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1024</span></span>
+<span class="line"><span style="color:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#9ECBFF">        "height"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">            "exact"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">768</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="user-media">User media</h2>
+<p>These are audio and video, meaning microphones and cameras.</p>
+<h2 id="display-media">Display Media</h2>
+<p>These are other things, like recording and screen capturing.</p>
+<p>An application that wants to be able to perform screen capturing and recording must use the Display Media API.</p>
+<h2 id="peer-connections">Peer connections</h2>
+<p>In order for two browsers to connect to each other, they must use an ICE (Internet Connectivity Establishment) server.</p>
+<p>The transferring of ICE candidates is called <code>signaling</code>.</p>
+<h3 id="signaling">Signaling</h3>
+<p>It’s needed in order for two peers to share how they should connect. The WebRTC protocol doesn’t implement this and it can be done in many different way. There’s no preference from the WebRTC side.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#E1E4E8">Bob </span><span style="color:#F97583">-----</span><span style="color:#E1E4E8"> Alice</span></span>
+<span class="line"><span style="color:#E1E4E8">                                     </span></span>
+<span class="line"><span style="color:#B392F0">Bob</span><span style="color:#E1E4E8">: creates offer </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> sets local description </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> sends offer to Signaling Server</span></span>
+<span class="line"><span style="color:#E1E4E8">Signaling </span><span style="color:#B392F0">Server</span><span style="color:#E1E4E8">: received offer </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> sends to connected Alice</span></span>
+<span class="line"><span style="color:#B392F0">Alice</span><span style="color:#E1E4E8">: receives offer </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> sets remote description </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> creates answer</span></span>
+<span class="line"><span style="color:#F97583">       -></span><span style="color:#E1E4E8"> sets local description </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> sends answer to Signaling Server</span></span>
+<span class="line"><span style="color:#E1E4E8">Signaling </span><span style="color:#B392F0">Server</span><span style="color:#E1E4E8">: receives answer </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> sends to connected Bob</span></span>
+<span class="line"><span style="color:#B392F0">Bob</span><span style="color:#E1E4E8">: receives answer </span><span style="color:#F97583">-></span><span style="color:#E1E4E8"> sets remote description</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">This is basically a Key Exchange </span><span style="color:#F97583">of</span><span style="color:#E1E4E8"> some sorts.</span></span></code></pre>
+<p>Once two peers have both the local and remote session descriptions (SDP - Session Description Protocol), they know all the capabilities of each other, but they are still not connected. In order to do that, they need to collect the ICE candidates in each peer and transfer to each other via the signaling server.</p>
+<h3 id="ice-candidates">ICE candidates</h3>
+<blockquote>
+<p>💡 IMPORTANT: the ICE will only establish connection IF there’s something to be shared. Meaning: if you don’t add a media track to the Peer Connection, it won’t try to connect/find ICE candidates.</p>
+</blockquote>
+<p>Before two peers can communicate using WebRTC, they need to exchange connectivity information (they already known the capabilities of each other using the Signaling part (SDP), but not how to connect to each other).</p>
+<p>To do that, usually we use an external service for this discovery of each peer. This service is called ICE (Internet Connectivity Establishment) and it uses either a STUN or TURN server to find out how each peer can reach each other.</p>
+<p>ICE can be defined as <em>“the algorithm that finds the best way for peers to connect”</em>. It tries everything to find the path between two peers (Local - LAN, STUN, TURN server), the wining path is the one used.</p>
+<p>STUN (Session Traversal Utilities for NAT) is how the browser, which is sitting usually behind NATs, firewalls etc, looks from the internet side. The browser calls the STUN server and it in response says “<em>oh, this is how you look from the outside, with this public ip: public port</em>”</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>- Good thing with STUN: fast, cheap/free, peers connect directly (P2P).</span></span>
+<span class="line"><span>- Problems with STUN: if the firewall is too gated or behind proxies and stuff like that, it won’t work properly.</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#B392F0">STUN</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">P1</span><span style="color:#E1E4E8"> calls </span><span style="color:#79B8FF">STUN</span></span>
+<span class="line"><span style="color:#79B8FF">STUN</span><span style="color:#E1E4E8"> gives </span><span style="color:#B392F0">its</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">P1</span><span style="color:#E1E4E8">) public ip and port</span></span>
+<span class="line"><span style="color:#79B8FF">P2</span><span style="color:#E1E4E8"> does the same</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Now </span><span style="color:#79B8FF">P1</span><span style="color:#E1E4E8"> can connect directly to </span><span style="color:#79B8FF">P2</span><span style="color:#F97583"> using</span><span style="color:#79B8FF"> their</span><span style="color:#E1E4E8"> respective public ips</span><span style="color:#F97583">:</span><span style="color:#B392F0">ports</span></span></code></pre>
+<p>TURN server (Traversal Using Relays around NAT) relays traffic between peers when direct connection fails.</p>
+<blockquote>
+<p>💡 Check: <a href="https://github.com/coturn/coturn">https://github.com/coturn/coturn</a> a free open-source self-hosted TURN server.<br>
+Here a simple implementation:</p>
+<h2 id="coturn---turn-server">Coturn - TURN server</h2>
+</blockquote>
+<ul>
+<li>Good thing with TURN server: It always work.</li>
+<li>Problems with TURN server: it’s costly because you need a server (the TURN server) to do all the handling of information from one peer to another, also it’s not P2P anymore</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="typescript"><code><span class="line"><span style="color:#79B8FF">TURN</span><span style="color:#B392F0"> server</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">P1</span><span style="color:#F97583"> &#x3C;-></span><span style="color:#79B8FF"> TURN</span><span style="color:#E1E4E8"> server </span><span style="color:#F97583">&#x3C;-></span><span style="color:#79B8FF"> P2</span></span></code></pre>
+<h2 id="data-channels">Data channels</h2>
+<p>These are used to send anything from one peer to another. It’s bidirectional.</p>
+<p>Each connection can have a theoretical limit of 65534 channels, although it varies from browser to browser.</p>
+<p>We can send string, blob, array buffer, typedarray or dataview. Data channels can be useful for back-channel content, such as images, file transfer, text chat, game update packets and so forth.</p>
+<blockquote>
+<p>💡 You can <code>send()</code> data at any time you want, with exception of when the channel is being created. Data sent before connecting is buffered if possible.</p>
+</blockquote>
+<blockquote>
+<p>💡 If the data channel is the first one added to the connection, then it will require renegotiation by emitting <code>negotiationneeded</code> event. If you don’t handle that, then you won’t be able to create channel. It will be in a limbo.</p>
+</blockquote> </div> </article>  </main> </div> </body></html>
