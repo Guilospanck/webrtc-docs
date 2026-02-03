@@ -15,10 +15,14 @@ const page = docs.find((d) => d.slug === slug);
 if (!page) {
   throw new Error("Doc not found");
 }
+
+const { Content } = await page.render();
 ---
 <DocsLayout nav={nav} title={page.data.title}>
   <article>
     <h1>{page.data.title}</h1>
-    <div class="markdown">{page.render()}</div>
+    <div class="markdown">
+      <Content />
+    </div>
   </article>
 </DocsLayout>
