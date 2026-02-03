@@ -1,5 +1,7 @@
 # Notion WebRTC Docs
 
+[![Deploy](https://github.com/Guilospanck/webrtc-docs/actions/workflows/deploy.yml/badge.svg)](https://github.com/Guilospanck/webrtc-docs/actions/workflows/deploy.yml)
+
 Static docs site powered by Astro, generated from the Notion page **“📡 WebRTC”** and its subpages.
 
 ## Overview
