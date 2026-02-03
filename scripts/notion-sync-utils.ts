@@ -37,7 +37,7 @@ export function ensureUniqueSlug(
 
 export function buildNavTree(pages: FlatPage[]): NavNode[] {
   const used = new Set<string>();
-  const nodes = pages.map((p) => ({
+  const nodes: Array<NavNode & { parentId: string | null }> = pages.map((p) => ({
     id: p.id,
     title: p.title,
     slug: ensureUniqueSlug(slugifyTitle(p.title), p.id, used),
@@ -49,13 +49,12 @@ export function buildNavTree(pages: FlatPage[]): NavNode[] {
   const roots: NavNode[] = [];
 
   for (const node of nodes) {
-    const parentId = (node as unknown as { parentId: string | null }).parentId;
-    if (parentId && byId.has(parentId)) {
-      byId.get(parentId)!.children.push(node);
+    if (node.parentId && byId.has(node.parentId)) {
+      byId.get(node.parentId)!.children.push(node);
     } else {
       roots.push(node);
     }
-    delete (node as unknown as { parentId?: string | null }).parentId;
+    delete (node as { parentId?: string | null }).parentId;
   }
 
   return roots;

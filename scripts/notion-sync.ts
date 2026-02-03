@@ -15,6 +15,8 @@ if (!rootId) {
   throw new Error("NOTION_ROOT_PAGE_ID is required");
 }
 
+const requiredRootId: string = rootId;
+
 const notion = new Client({ auth: token });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
@@ -74,12 +76,12 @@ async function writeDocs(pages: { id: string; title: string; parentId: string | 
 
 async function main() {
   const pages = await buildFlatTree({
-    rootId,
+    rootId: requiredRootId,
     fetchPage: (id) => notion.pages.retrieve({ page_id: id }) as Promise<any>,
     fetchChildPages: listChildPages,
   });
 
-  const withoutRoot = pages.filter((page) => page.id !== rootId);
+  const withoutRoot = pages.filter((page) => page.id !== requiredRootId);
   await writeDocs(withoutRoot);
 }
 
