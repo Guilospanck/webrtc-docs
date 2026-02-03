@@ -48,7 +48,7 @@ async function writeDocs(pages: { id: string; title: string; parentId: string | 
     const md = n2m.toMarkdownString(mdBlocks).parent;
 
     const slug = ensureUniqueSlug(slugifyTitle(page.title), page.id, used);
-    const frontmatter = `---\ntitle: "${page.title}"\nslug: "${slug}"\nnotionId: "${page.id}"\n---\n`;
+    const frontmatter = `---\ntitle: "${page.title}"\nnotionId: "${page.id}"\n---\n`;
 
     await writeFile(
       join(docsDir, `${slug}.md`),

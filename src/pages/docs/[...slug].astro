@@ -5,12 +5,12 @@ import nav from "../../content/docs/_nav.json";
 
 export async function getStaticPaths() {
   const docs = await getCollection("docs");
-  return docs.map((doc) => ({ params: { slug: doc.data.slug } }));
+  return docs.map((doc) => ({ params: { slug: doc.slug } }));
 }
 
 const { slug } = Astro.params;
 const docs = await getCollection("docs");
-const page = docs.find((d) => d.data.slug === slug);
+const page = docs.find((d) => d.slug === slug);
 
 if (!page) {
   throw new Error("Doc not found");
