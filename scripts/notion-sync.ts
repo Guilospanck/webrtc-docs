@@ -1,0 +1,73 @@
+import { Client } from "@notionhq/client";
+import { NotionToMarkdown } from "notion-to-md";
+import { mkdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { buildNavTree, ensureUniqueSlug, slugifyTitle } from "./notion-sync-utils";
+import { buildFlatTree } from "./notion-sync-core";
+
+const rootId = process.env.NOTION_ROOT_PAGE_ID;
+const token = process.env.NOTION_TOKEN;
+
+if (!token) {
+  throw new Error("NOTION_TOKEN is required");
+}
+if (!rootId) {
+  throw new Error("NOTION_ROOT_PAGE_ID is required");
+}
+
+const notion = new Client({ auth: token });
+const n2m = new NotionToMarkdown({ notionClient: notion });
+
+async function listChildPages(pageId: string) {
+  const blocks: any[] = [];
+  let cursor: string | undefined;
+
+  do {
+    const res = await notion.blocks.children.list({
+      block_id: pageId,
+      start_cursor: cursor,
+    });
+    blocks.push(...res.results);
+    cursor = res.has_more ? res.next_cursor ?? undefined : undefined;
+  } while (cursor);
+
+  return blocks;
+}
+
+async function writeDocs(pages: { id: string; title: string; parentId: string | null }[]) {
+  const docsDir = join(process.cwd(), "src", "content", "docs");
+  await mkdir(docsDir, { recursive: true });
+
+  const used = new Set<string>();
+  for (const page of pages) {
+    const mdBlocks = await n2m.pageToMarkdown(page.id);
+    const md = n2m.toMarkdownString(mdBlocks).parent;
+
+    const slug = ensureUniqueSlug(slugifyTitle(page.title), page.id, used);
+    const frontmatter = `---\ntitle: "${page.title}"\nslug: "${slug}"\nnotionId: "${page.id}"\n---\n`;
+
+    await writeFile(
+      join(docsDir, `${slug}.md`),
+      `${frontmatter}\n${md || "No content yet."}`
+    );
+  }
+
+  const nav = buildNavTree(pages).slice(1);
+  await writeFile(join(docsDir, "_nav.json"), JSON.stringify(nav, null, 2));
+}
+
+async function main() {
+  const pages = await buildFlatTree({
+    rootId,
+    fetchPage: (id) => notion.pages.retrieve({ page_id: id }) as Promise<any>,
+    fetchChildPages: listChildPages,
+  });
+
+  const withoutRoot = pages.filter((page) => page.id !== rootId);
+  await writeDocs(withoutRoot);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
