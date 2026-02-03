@@ -9,14 +9,14 @@ describe("rewriteNotionLinks", () => {
       ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "general"],
       ["bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "metrics"],
     ]);
-    expect(rewriteNotionLinks(md, map)).toBe(
-      "See /docs/general/ and /docs/metrics/"
+    expect(rewriteNotionLinks(md, map, "/webrtc-docs/")).toBe(
+      "See /webrtc-docs/docs/general/ and /webrtc-docs/docs/metrics/"
     );
   });
 
   it("keeps external links unchanged", () => {
     const md = "Visit https://example.com";
     const map = new Map();
-    expect(rewriteNotionLinks(md, map)).toBe(md);
+    expect(rewriteNotionLinks(md, map, "/webrtc-docs/")).toBe(md);
   });
 });

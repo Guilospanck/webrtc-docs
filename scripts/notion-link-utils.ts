@@ -4,10 +4,15 @@ function normalizeId(id: string): string {
   return id.replace(/-/g, "");
 }
 
-export function rewriteNotionLinks(md: string, idToSlug: Map<string, string>): string {
+export function rewriteNotionLinks(
+  md: string,
+  idToSlug: Map<string, string>,
+  basePath: string
+): string {
+  const base = basePath.endsWith("/") ? basePath : `${basePath}/`;
   return md.replace(NOTION_URL_RE, (match, rawId) => {
     const normalized = normalizeId(rawId);
     const slug = idToSlug.get(normalized);
-    return slug ? `/docs/${slug}/` : match;
+    return slug ? `${base}docs/${slug}/` : match;
   });
 }

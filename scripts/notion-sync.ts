@@ -9,6 +9,7 @@ import { rewriteNotionLinks } from "./notion-link-utils";
 
 const rootId = process.env.NOTION_ROOT_PAGE_ID;
 const token = process.env.NOTION_TOKEN;
+const basePath = process.env.BASE_PATH || "/";
 
 if (!token) {
   throw new Error("NOTION_TOKEN is required");
@@ -67,7 +68,7 @@ async function writeDocs(pages: { id: string; title: string; parentId: string | 
     if (!slug) {
       continue;
     }
-    const md = rewriteNotionLinks(rawMd || "", idToSlug);
+    const md = rewriteNotionLinks(rawMd || "", idToSlug, basePath);
     const frontmatter = `---\ntitle: "${page.title}"\nnotionId: "${page.id}"\n---\n`;
 
     await writeFile(
