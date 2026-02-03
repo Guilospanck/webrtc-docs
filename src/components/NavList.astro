@@ -1,0 +1,13 @@
+---
+const { items, docUrl } = Astro.props;
+---
+<ul>
+  {items.map((item) => (
+    <li>
+      <a href={docUrl(item.slug)}>{item.title}</a>
+      {item.children?.length ? (
+        <Astro.self items={item.children} docUrl={docUrl} />
+      ) : null}
+    </li>
+  ))}
+</ul>

@@ -1,20 +1,10 @@
 ---
 import "../styles/global.css";
+import NavList from "../components/NavList.astro";
 
 const { nav, title } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const docUrl = (slug) => `${base}docs/${slug}/`;
-
-const renderNav = (items) => (
-  <ul>
-    {items.map((item) => (
-      <li>
-        <a href={docUrl(item.slug)}>{item.title}</a>
-        {item.children?.length ? renderNav(item.children) : null}
-      </li>
-    ))}
-  </ul>
-);
 ---
 <html lang="en">
   <head>
@@ -26,7 +16,9 @@ const renderNav = (items) => (
     <div class="layout">
       <aside class="sidebar">
         <div class="brand">WebRTC</div>
-        <nav>{renderNav(nav)}</nav>
+        <nav>
+          <NavList items={nav} docUrl={docUrl} />
+        </nav>
       </aside>
       <main class="content">
         <slot />

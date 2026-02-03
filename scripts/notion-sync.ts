@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Client } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { buildNavTree, ensureUniqueSlug, slugifyTitle } from "./notion-sync-utils";
 import { buildFlatTree } from "./notion-sync-core";
@@ -41,6 +41,12 @@ async function listChildPages(pageId: string) {
 async function writeDocs(pages: { id: string; title: string; parentId: string | null }[]) {
   const docsDir = join(process.cwd(), "src", "content", "docs");
   await mkdir(docsDir, { recursive: true });
+  const existing = await readdir(docsDir);
+  await Promise.all(
+    existing
+      .filter((file) => file.endsWith(".md"))
+      .map((file) => unlink(join(docsDir, file)))
+  );
 
   const used = new Set<string>();
   const idToSlug = new Map<string, string>();
