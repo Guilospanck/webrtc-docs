@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Topologies</title><link rel="icon" type="image/svg+xml" href="/webrtc-docs/favicon.svg"><link rel="icon" href="/webrtc-docs/favicon.ico"><style>:root{--bg: #141414;--surface: #1b1b1b;--surface-2: #202020;--ink: #e8e6e3;--muted: #a3a3a3;--accent: #7aa2f7;--accent-2: #87c6a5;--border: #2b2b2b;--code-bg: #0f1115;--code-ink: #e8e6e3;font-family:"Source Sans 3",IBM Plex Sans,Work Sans,sans-serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#1f1f1f,#141414 55%,#111);color:var(--ink)}.layout{display:grid;grid-template-columns:minmax(240px,300px) 1fr;min-height:100vh}.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:2rem 1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto}.brand{font-size:.9rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:1.75rem;color:var(--muted)}.sidebar ul{list-style:none;padding:0;margin:0}.sidebar li{margin:.35rem 0}.sidebar a{color:var(--ink);text-decoration:none;font-weight:500;font-size:.95rem}.sidebar a:hover{color:var(--accent)}.sidebar ul ul{margin-top:.35rem;margin-left:.65rem;padding-left:.65rem;border-left:1px solid var(--border)}.content{padding:3.5rem 5vw;max-width:820px}h1{font-size:2.15rem;margin-bottom:1.25rem;font-weight:600}h2,h3,h4{font-weight:600;margin-top:2rem}.markdown{line-height:1.75;font-size:1.02rem;color:var(--ink)}.markdown a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}.markdown a:hover{border-bottom-color:var(--accent)}.markdown pre{background:var(--code-bg);color:var(--code-ink);padding:1rem;overflow-x:auto;border-radius:8px}.markdown code{background:#ffffff0f;padding:.15rem .35rem;border-radius:4px}.markdown blockquote{margin:1.5rem 0;padding:.6rem 1rem;border-left:3px solid var(--border);background:var(--surface-2);color:var(--muted)}@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}}
+</style></head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">WebRTC</div> <nav> <ul> <li> <a href="/webrtc-docs/docs/general/">General</a>  </li><li> <a href="/webrtc-docs/docs/webrtc-dev/">WebRTC - Dev</a> <ul> <li> <a href="/webrtc-docs/docs/coturn-turn-server/">Coturn - TURN server</a>  </li> </ul> </li><li> <a href="/webrtc-docs/docs/metrics/">Metrics</a>  </li><li> <a href="/webrtc-docs/docs/debugging/">Debugging</a>  </li><li> <a href="/webrtc-docs/docs/planning/">Planning</a>  </li><li> <a href="/webrtc-docs/docs/misc/">Misc</a> <ul> <li> <a href="/webrtc-docs/docs/adaptive-strategies/">Adaptive Strategies</a>  </li><li> <a href="/webrtc-docs/docs/topologies/">Topologies</a>  </li><li> <a href="/webrtc-docs/docs/servers/">Servers</a>  </li> </ul> </li> </ul> </nav> </aside> <main class="content">  <article> <h1>Topologies</h1> <div class="markdown"> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Property</th><th>Mesh</th><th>SFU</th><th>MCU</th></tr></thead><tbody><tr><td>Server CPU</td><td>none</td><td>low</td><td>high</td></tr><tr><td>Client upload</td><td>n−1</td><td>1</td><td>1</td></tr><tr><td>Client download</td><td>n−1</td><td>n−1</td><td>1</td></tr><tr><td>Media mixing</td><td>no</td><td>no</td><td>yes</td></tr></tbody></table>
+<h2 id="p2p-mesh">P2P (Mesh)</h2>
+<p>Each peer talks to another peer.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">A</span><span style="color:#9ECBFF"> ↔</span><span style="color:#9ECBFF"> B</span></span>
+<span class="line"><span style="color:#B392F0">↕</span><span style="color:#9ECBFF">   ↕</span></span>
+<span class="line"><span style="color:#B392F0">C</span><span style="color:#9ECBFF"> ↔</span><span style="color:#9ECBFF"> D</span></span></code></pre>
+<ul>
+<li>Not suitable for when a call starts to have more than 1-1, due to high upload bandwidth (needs to encode and send the stream to each one of the participants) and high CPU load on the sender side</li>
+<li>Best for 1:1 calls</li>
+</ul>
+<h2 id="sfu-selective-forwarding-unit--used-a-lot">SFU (Selective Forwarding Unit) ← Used a lot</h2>
+<p>You have a SFU server that forwards the sender stream to each one of the connected participants. It’s a HUB that acts intelligently, forwarding different qualities to different clients depending on their capabilities/network, without encoding/decoding media.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">A</span></span>
+<span class="line"><span style="color:#F97583">           |</span><span style="color:#B392F0">                              A</span><span style="color:#9ECBFF"> sends</span><span style="color:#9ECBFF"> a</span><span style="color:#9ECBFF"> stream</span><span style="color:#9ECBFF"> to</span><span style="color:#9ECBFF"> SFU</span></span>
+<span class="line"><span style="color:#F97583">           |</span><span style="color:#B392F0">                              B</span><span style="color:#9ECBFF"> sends</span><span style="color:#9ECBFF"> a</span><span style="color:#9ECBFF"> stream</span><span style="color:#9ECBFF"> to</span><span style="color:#9ECBFF"> SFU</span></span>
+<span class="line"><span style="color:#F97583">           |</span><span style="color:#B392F0">                              C</span><span style="color:#9ECBFF"> sends</span><span style="color:#9ECBFF"> a</span><span style="color:#9ECBFF"> stream</span><span style="color:#9ECBFF"> to</span><span style="color:#9ECBFF"> SFU</span></span>
+<span class="line"><span style="color:#B392F0">  B</span><span style="color:#79B8FF"> ------</span><span style="color:#9ECBFF"> SFU</span><span style="color:#79B8FF"> ------</span><span style="color:#9ECBFF"> C</span><span style="color:#9ECBFF">                   D</span><span style="color:#9ECBFF"> receives</span><span style="color:#79B8FF"> 3</span><span style="color:#9ECBFF"> streams</span></span>
+<span class="line"><span style="color:#F97583">           |</span></span>
+<span class="line"><span style="color:#F97583">           |</span></span>
+<span class="line"><span style="color:#F97583">           |</span></span>
+<span class="line"><span style="color:#B392F0">           D</span></span></code></pre>
+<ul>
+<li>Sender sends a stream only to the SFU server</li>
+<li>Receivers will receive streams from each one of the senders</li>
+<li>Clients will decode multiple streams</li>
+<li>Good for group calls</li>
+<li>Low latency</li>
+</ul>
+<blockquote>
+<p>💡 One thing that got in my mind was the difference between SFU and TURN: they solve different problems.</p>
+<ul>
+<li>
+<p>In a normal 1-1 call, if you DON’T use SFU, you will connect a peer A to a peer B via either host / public (srflx, prflx) / or TURN</p>
+</li>
+<li>
+<p>If you DO use a SFU server, then you will do the same connection, but this time peer A to SFU and peer B to SFU. Peers don’t connect to each other, they connect only to the SFU and this connection will also be via host / or public (srflx, prflx) / or TURN server.</p>
+</li>
+</ul>
+<p>So yes: you do need <em>another server if you’re going to use SFU.</em></p>
+</blockquote>
+<h2 id="mcu-multipoint-control-unit--not-very-used-legacy">MCU (Multipoint Control Unit) ← Not very used (legacy)</h2>
+<p>You have a MCU server that mix all the received streams into just one and send them to the connected participants.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">A</span><span style="color:#9ECBFF"> sends</span><span style="color:#9ECBFF"> a</span><span style="color:#9ECBFF"> stream</span><span style="color:#9ECBFF"> to</span><span style="color:#9ECBFF"> MCU</span></span>
+<span class="line"><span style="color:#B392F0">                                B</span><span style="color:#9ECBFF"> sends</span><span style="color:#9ECBFF"> a</span><span style="color:#9ECBFF"> stream</span><span style="color:#9ECBFF"> to</span><span style="color:#9ECBFF"> MCU</span></span>
+<span class="line"><span style="color:#B392F0">                                C</span><span style="color:#9ECBFF"> sends</span><span style="color:#9ECBFF"> a</span><span style="color:#9ECBFF"> stream</span><span style="color:#9ECBFF"> to</span><span style="color:#9ECBFF"> MCU</span></span>
+<span class="line"><span style="color:#B392F0">                                ABCD</span><span style="color:#9ECBFF"> receives</span><span style="color:#9ECBFF"> one</span><span style="color:#9ECBFF"> mixed</span><span style="color:#9ECBFF"> stream</span></span>
+<span class="line"><span style="color:#E1E4E8">                                </span></span>
+<span class="line"><span style="color:#B392F0">A</span><span style="color:#9ECBFF"> →</span><span style="color:#9ECBFF">     ┐</span></span>
+<span class="line"><span style="color:#B392F0">B</span><span style="color:#9ECBFF"> →</span><span style="color:#9ECBFF"> MCU</span><span style="color:#9ECBFF"> ├→</span><span style="color:#9ECBFF"> mixed</span><span style="color:#9ECBFF"> stream</span><span style="color:#9ECBFF"> →</span><span style="color:#9ECBFF"> A</span></span>
+<span class="line"><span style="color:#B392F0">C</span><span style="color:#9ECBFF"> →</span><span style="color:#9ECBFF">     ┘</span><span style="color:#9ECBFF">               →</span><span style="color:#9ECBFF"> B</span></span>
+<span class="line"><span style="color:#B392F0">                        →</span><span style="color:#9ECBFF"> C</span></span></code></pre>
+<ul>
+<li>Senders send their stream to MCU</li>
+<li>MCU mix/composites and sends a single stream to each connected peer</li>
+<li>High CPU usage on the MCU server</li>
+<li>More latency and cost (the server must handle a lot of encoding/mixing/composing)</li>
+</ul> </div> </article>  </main> </div> </body></html>
